@@ -1,0 +1,14 @@
+
+
+.renderer-menu {
+  z-index: 10;
+  height : 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: hsl(120, 100%, 75%);
+}
+
+.renderer-menu-hidden {
+  visibility : hidden;
+}

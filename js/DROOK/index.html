@@ -1,0 +1,27 @@
+<html>
+
+	<head>
+		<link rel="stylesheet" href="css/bootstrap.min.css"></link>
+		<link rel="stylesheet" href="drook.css"></link>
+		<script src="lib/three.min.js"></script>
+		<script src="lib/angular.js"></script>
+		<script src="lib/angular-slide-menu.min.js"></script>
+		<script src="app.js"></script>
+		<script src="drook.js"></script>
+		
+	</head>
+	<body ng-app="DrookApp">
+		<div ng-controller="ShowController">
+			<button ng-click="show = !show">Toggle</button>	
+			<div class="row" ng-if="show">
+			
+				<div class="col-md-4" renderer>
+				</div>
+				
+				<div class="col-md-8">
+				</div>
+			</div>
+		</div>
+		<canvas id="myCanvas" width="2048" height="1024" style="border:3px solid #c3c3c3;"></canvas>
+	</body>
+</html>
