@@ -1,14 +1,73 @@
 
-
 .renderer-menu {
-  z-index: 10;
-  height : 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: hsl(120, 100%, 75%);
+	border-top: 1px solid gray;
+	padding: 5px;
+	position: absolute;
+	top: 375px; 
+	z-index: 10;
+	width: 100%;
+	overflow : hidden;
 }
 
-.renderer-menu-hidden {
-  visibility : hidden;
+.renderer-menu-slide-in {
+	border-top: 1px solid gray;
+    transition: 0.5s;
+	background-color: hsl(120, 100%, 75%);
 }
+.renderer-menu-slide-out {
+    transition: 0.7s;
+}
+
+/**
+====================================================
+**/
+
+.renderer-menu-wrapper {
+	padding: 5px;
+}
+
+.renderer-menu-handle {
+	line-height: 100%;
+	text-align: center;
+}
+
+.renderer-menu-body {
+	text-align: center;
+	width: 100%;
+}
+
+.renderer-menu-rotate {
+	width: 30%;
+	display: inline-block; 
+	vertical-align: middle;
+}
+
+.renderer-menu-rotate > label {
+	margin : 0px;
+}
+
+.renderer-menu-rotate > input {
+	margin : 0px;
+}
+
+.renderer-menu-scale {
+	width: 65%;
+	display: inline-block; 
+	vertical-align: middle;
+	text-align: center;
+}
+
+.renderer-menu-scale > label {
+	display: inline-block; 
+	vertical-align: middle;
+	margin : 0px;
+}
+
+.renderer-menu-scale  > input {
+	display: inline-block; 
+	vertical-align: middle;
+	width : 70%;
+	margin : 0px;
+	padding: 0px;
+}
+

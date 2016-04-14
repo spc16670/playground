@@ -1,6 +1,8 @@
 
 
-var module = angular.module('controller.Show',[]);
+var module = angular.module('controller.Show',[
+	'services.Util'
+]);
 
 module.controller('ShowController',['$scope',function($scope){
 	$scope.show = true;
@@ -8,154 +10,133 @@ module.controller('ShowController',['$scope',function($scope){
 
 var module = angular.module('directive.Renderer',[]);
 
-module.directive('renderer',[function(){
+module.directive('renderer',['UtilService','$http','$templateCache','$compile',function(UtilService,$http,$templateCache,$compile){
 	 return {
-		restrict: 'AE'
+		restrict: 'A'
+		,template: "<div class=\"renderer-menu renderer-menu-slide-out\"></div>"
 		,link: function (scope, element, atts, controller) {
-
-
-			scope.getBitmap = function (index) {
-				function drawCircle(x,y,r,context) {
-				    context.beginPath();
-				    context.arc(x,y,r,0,Math.PI*2,true);
-				    context.closePath();
-				    context.fill();
-				}
-				function getRandomColor() {
-				    // creating a random number between 0 and 255
-				    var r = Math.floor(Math.random()*256);
-				    var g = Math.floor(Math.random()*256);
-				    var b = Math.floor(Math.random()*256);
-				     
-				    // going from decimal to hex
-				    var hexR = r.toString(16);
-				    var hexG = g.toString(16);
-				    var hexB = b.toString(16);
-				     
-				    // making sure single character values are prepended with a "0"
-				    if (hexR.length == 1) hexR = "0" + hexR;
-				    if (hexG.length == 1) hexG = "0" + hexG;
-				    if (hexB.length == 1) hexB = "0" + hexB;
-				    
-				    // creating the hex value by concatenatening the string values
-				    var hexColor = "#" + hexR + hexG + hexB;
-				    return hexColor.toUpperCase();
-				} 
-				var theCanvas=document.getElementById("myCanvas");
-				var canvasContext=theCanvas.getContext("2d");
-				for(var i=0; i<500; i++) {
-				    canvasContext.fillStyle=getRandomColor();
-				    drawCircle(Math.random()*theCanvas.width,
-				               Math.random()*theCanvas.height,
-				               Math.random()*40+10,
-				               canvasContext);
-				}
-				return canvasContext.canvas.toDataURL();
-			}
-							
-			if (DROOK.THREE) {
-
-				var size = { x: 500, y: 400 };
-
-				var state = { 
-					scene : null 
-					, camera : null
-					, renderer : null
-					, mesh : null
-					, controls : null
-					, animRef : null
-				}; 				
-				
-				function init() {
-					state.scene = new THREE.Scene();
-
-					state.camera = new THREE.PerspectiveCamera( 75, size.x / size.y , 1, 10000 );
-					state.camera.position.z = 1000;
-
-					var geometry = new THREE.BoxGeometry( 200, 200, 200 );
-
-					var materials = [];
-					for (var i=0;i<6;i++) {
-						materials.push(new THREE.MeshBasicMaterial( { color: 0xd3d3d3, overdraw : true } ));
-					}
-					var material = new THREE.MeshFaceMaterial(materials);
-
-					state.mesh = new THREE.Mesh( geometry, material );
-					state.scene.add( state.mesh );
-
-					state.renderer = new THREE.WebGLRenderer( { alpha: true } );
-					state.renderer.setClearColor( 0x000000, 0 );
-					state.renderer.setSize( size.x, size.y );
-
-					element[0].addEventListener("mouseenter",function() { scope.toggleMenu(true); });
-					element[0].addEventListener("mouseleave",function() { scope.toggleMenu(false); });
-					element[0].appendChild( state.renderer.domElement );
-
-					var menuDiv = document.createElement("div");
-					menuDiv.name = "rendererMenu";
-					menuDiv.innerHTML = "asdf";
-					menuDiv.className = "renderer-menu renderer-menu-hidden";
-					element[0].appendChild( menuDiv );
 					
-					
-					for (var i=0;i<state.mesh.material.materials.length;i++) {
-
-						scope.getBitmap(i);
-						var image = new Image();
-						var texture = new THREE.Texture(image);
-						state.mesh.material.materials[i].map = texture;
-						image.onload = function() {
-							for (var j=0;j<state.mesh.material.materials.length;j++) {
-								state.mesh.material.materials[j].map.needsUpdate = true
-							}
-						} 
-						image.src = scope.getBitmap();
-
-					}
-
-				}
-
-				function animate() {
-
-					state.animRef = requestAnimationFrame( animate );
-
-					state.mesh.rotation.x += 0.01;
-					state.mesh.rotation.y += 0.02;
-
-					state.renderer.render( state.scene, state.camera );
-
-				}
-				init();
-				animate();
-
-			}
+			var size = { x: element[0].clientWidth, y: 400 };
+			console.log(size);
+			var STATE = { 
+				scene : null 
+				, camera : null
+				, renderer : null
+				, mesh : null
+				, controls : null
+				, animRef : null
+			}; 				
 			
+			function init() {
+			
+				$http.get(atts.menuTemplate, {cache: $templateCache}).success(function(html) {
+					var linkFn = $compile(html);
+					var content = linkFn(scope);
+					var htmlDiv = element[0].querySelector(".renderer-menu");
+					var el = angular.element(htmlDiv);
+					el.append(content);
+				})
 
-			scope.toggleMenu = function(onOff) {
+			
+				STATE.scene = new THREE.Scene();
+
+				STATE.camera = new THREE.PerspectiveCamera( 75, size.x / size.y , 1, 10000 );
+				STATE.camera.position.z = 1000;
+
+				var geometry = new THREE.BoxGeometry( 200, 200, 200 );
+
+				var materials = [];
+				for (var i=0;i<6;i++) {
+					materials.push(new THREE.MeshBasicMaterial( { color: 0xd3d3d3, overdraw : true } ));
+				}
+				var material = new THREE.MeshFaceMaterial(materials);
+
+				STATE.mesh = new THREE.Mesh( geometry, material );
+				STATE.scene.add( STATE.mesh );
+
+				STATE.renderer = new THREE.WebGLRenderer( { alpha: true } );
+				STATE.renderer.setClearColor( 0x000000, 0 );
+				STATE.renderer.setSize( size.x, size.y );
+				
+				element[0].addEventListener("mouseenter",function() { scope.toggleMenu(true); });
+				element[0].addEventListener("mouseleave",function() { scope.toggleMenu(false); });
+				
+				STATE.renderer.domElement.style.border = "1px solid black";
+				
+				element[0].style.overflow = "hidden";
+				element[0].style.margin = "0px";
+				element[0].style.padding = "0px";
+				element[0].appendChild( STATE.renderer.domElement );
+				
+				for (var i=0;i<STATE.mesh.material.materials.length;i++) {
+					var image = new Image();
+					var texture = new THREE.Texture(image);
+					STATE.mesh.material.materials[i].map = texture;
+					image.onload = function() {
+						for (var j=0;j<STATE.mesh.material.materials.length;j++) {
+							STATE.mesh.material.materials[j].map.needsUpdate = true
+						}
+					} 
+					image.src = UtilService.getBitmap();
+				}
+
+			}
+
+			function animate() {
+				STATE.animRef = requestAnimationFrame( animate );
+				STATE.mesh.rotation.x += 0.01;
+				STATE.mesh.rotation.y += 0.02;
+				STATE.renderer.render( STATE.scene, STATE.camera );
+			}
+			init();
+			animate();
+
+
+			scope.menu = { scale : { value : 2 }, rotate : { selected : false } };
+			scope.$watch( function() { return scope.menu.scale.value },function(){
+				console.log(scope.menu.scale.value);
+			},true);
+			scope.$watch( function() { return scope.menu.rotate.selected } ,function(){
+				console.log(scope.menu.rotate.selected);
+			},true);
+			
+			scope.toggleMenu = function(on) {
 				var htmlDiv = element[0].querySelector(".renderer-menu");
 				var el = angular.element(htmlDiv);
-				onOff ? el.removeClass("renderer-menu-hidden") : el.addClass("renderer-menu-hidden");
-			}
 
+				if (on) {
+					el.removeClass("renderer-menu-slide-out"); 
+					var top = (el[0].top = size.y - el[0].clientHeight) + "px";
+					el.css({ top: top });
+					el.addClass("renderer-menu-slide-in");
+				} else {
+					var menuHandleDiv = element[0].querySelector(".renderer-menu-handle");
+					var menuHandleDivEl = angular.element(menuHandleDiv);
+					var top = (el[0].top = (size.y - 10) - menuHandleDivEl[0].clientHeight) + "px";
+					el.css({ top: top });
+					el.addClass("renderer-menu-slide-out");
+					el.removeClass("renderer-menu-slide-in"); 
+				}
+			}
 
 			scope.$on('$destroy', function() {
 				function empty(elem) {
 				    while (elem.lastChild) elem.removeChild(elem.lastChild);
 				}
 
-				cancelAnimationFrame( state.animRef );
-				state.scene.remove(state.mesh);
+				cancelAnimationFrame( STATE.animRef );
+				STATE.scene.remove(STATE.mesh);
 
-				for (var j=0;j<state.mesh.material.materials.length;j++) {
-					state.mesh.material.materials[j].map.dispose();
+				for (var j=0;j<STATE.mesh.material.materials.length;j++) {
+					STATE.mesh.material.materials[j].map.dispose();
 				}
-				state.mesh.geometry.dispose();
-				state.mesh = null;
-				state.scene = null;
-				state.renderer = null;
-				state.camera = null;
-				state.controls = null;
-				state = null;
+				STATE.mesh.geometry.dispose();
+				STATE.mesh = null;
+				STATE.scene = null;
+				STATE.renderer = null;
+				STATE.camera = null;
+				STATE.controls = null;
+				STATE = null;
 				empty(element[0]);
 
 				console.log("destroy");

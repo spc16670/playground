@@ -6,22 +6,57 @@
 		<script src="lib/three.min.js"></script>
 		<script src="lib/angular.js"></script>
 		<script src="lib/angular-slide-menu.min.js"></script>
+		<script src="services/Util.js"></script>
 		<script src="app.js"></script>
 		<script src="drook.js"></script>
 		
 	</head>
 	<body ng-app="DrookApp">
+	
+	
+	    <script type="text/ng-template" id="renderer-menu-template.html">
+		
+			<div class="renderer-menu-wrapper">
+				<!-- HANLDE -->
+				<div class="renderer-menu-handle">
+					<p>^</p>
+				</div>
+				<!-- BODY -->
+				<div class="renderer-menu-body">
+				
+					<div class="renderer-menu-rotate">
+						<label>Rotate: &nbsp;</label>
+						<input type="checkbox" ng-model="menu.rotate.selected"></input>
+					</div>
+					
+					<div class="renderer-menu-scale">
+						<label>Scale: &nbsp;</label>
+						<input type="range" ng-model="menu.scale.value"></input>
+					</div>
+					
+				</div>
+				
+			</div>
+		
+        </script>
+		
+		
+		
+		
 		<div ng-controller="ShowController">
 			<button ng-click="show = !show">Toggle</button>	
 			<div class="row" ng-if="show">
-			
-				<div class="col-md-4" renderer>
+				<div class="col-md-4">
 				</div>
 				
-				<div class="col-md-8">
+				<div class="col-md-4" renderer menu-template="renderer-menu-template.html">
+				</div>
+				
+				<div class="col-md-4">
 				</div>
 			</div>
 		</div>
+		<br><br>
 		<canvas id="myCanvas" width="2048" height="1024" style="border:3px solid #c3c3c3;"></canvas>
 	</body>
 </html>
