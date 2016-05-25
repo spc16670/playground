@@ -6,7 +6,7 @@
 
 	var Editor = function() {
 		this.executing = null;
-		this.history = SNIP_LIST.create();
+		this.history = DROOKY.Utils.SnipList.create();
 	};
 
 	Editor.prototype = {
@@ -44,69 +44,21 @@
 		constructor : Command
 		,execute : function () { throw NOT_IMPLEMENTED; }
 		,reverse : function () { throw NOT_IMPLEMENTED; }
+		,init : function() { DROOKY.Editor.Command.call( this ) }
+		,listener : function() { }
 	}
 	
 	Editor.prototype.Command = Command;
 	
-	Editor.prototype.load = function(fn) {
-		var args = Array.prototype.slice.call(arguments, 1);
-		console.log("args",args)
-		//method creates a new object with the specified prototype object and properties.
+	Editor.prototype.load = function(fn,args) {
 		fn.prototype = Object.create(DROOKY.Editor.Command.prototype);
 		fn.prototype.constructor = fn;
-		return new fn;
+		var inst = new fn;
+		inst.init();
+		return fn.apply(inst,args);
 	}	
-})(DROOKY || {});
-
-
-
-// ====================================================================
-
-var Commands = {
-
-	CopyCommand : function CopyCommand() {
-		DROOKY.Editor.Command.call( this );
-		this.execute = function() { console.log(" CopyCommand BEEN EXECUTED ") }
-		this.reverse = function() { console.log(" CopyCommand BEEN REVERSED ") }
-	}
 	
-	,ToolCommand : function ToolCommand(name) {
-		DROOKY.Editor.Command.call( this );
-		this.name = name;
-		this.execute = function() { console.log(" ToolCommand BEEN EXECUTED " + this.name) }
-		this.reverse = function() { console.log(" ToolCommand BEEN REVERSED " + this.name) }
-	}
-
-}
-
-	
-function unDo() {
-	DROOKY.Editor.unDo();
-	console.log(DROOKY);
-}
-
-//DROOKY.Editor.load(fn);
-function reDo() {
-	DROOKY.Editor.reDo();
-	console.log(DROOKY);
-}
-
-function copy() {
-	DROOKY.Editor.load(Commands['CopyCommand']);
-	DROOKY.Editor.run();
-	console.log(DROOKY);
-}
-
-function tool() {
-	var fn = Commands['ToolCommand'];
-	console.log("fn",fn);
-	DROOKY.Editor.load(fn);
-	DROOKY.Editor.run();
-	console.log(DROOKY);
-}
-
-//=================
-
+})(DROOKY);
 
 
 

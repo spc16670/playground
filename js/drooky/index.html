@@ -1,15 +1,17 @@
 <html>
 <script src="Drooky.js"></script>
-<script src="SnipList.js"></script>
 <script src="Utils.js"></script>
+<script src="SnipList.js"></script>
 <script src="Editor.js"></script>
-
+<script src="Commands.js"></script>
 
 <body>
+<button onclick="crop()">Crop</button>
 <button onclick="copy()">Copy</button>
-<button onclick="tool()">Tool</button>
+<button onclick="tool('miotla')">Tool</button>
 <button onclick="reDo()">Redo</button>
 <button onclick="unDo()">Undo</button>
+<canvas id="canvas" style="border: 1px solid black"></canvas>
 </body>
 
 </html>

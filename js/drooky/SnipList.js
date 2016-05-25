@@ -1,13 +1,13 @@
 
-var SNIP_LIST;
 
-(function(SNIP_LIST){
+(function(DROOKY){
 	'use strict';
+	DROOKY.Utils.SnipList = {};
 	
-	var DLL = function(params) {
+	var SnipList = function(params) {
 		
 		
-		function DLL(params) {
+		function SnipList(params) {
 			this.length = 0;
 			this.head = null;
 			this.tail = null;
@@ -28,7 +28,7 @@ var SNIP_LIST;
 		 * @return {Void}
 		 * @method add
 		 */
-		DLL.prototype.add = function(data) {
+		SnipList.prototype.add = function(data) {
 
 			var node = new Node(data);
 			
@@ -55,7 +55,7 @@ var SNIP_LIST;
 		 *      the item doesn't exist.
 		 * @method remove
 		 */
-		DLL.prototype.remove = function(index) {
+		SnipList.prototype.remove = function(index) {
 			//check for out-of-bounSNIP_LIST values
 			if (index > -1 && index < this.length){
 
@@ -114,7 +114,7 @@ var SNIP_LIST;
 		 * @return {variant} node
 		 * @method node
 		 */
-		DLL.prototype.node = function(index) {
+		SnipList.prototype.node = function(index) {
 
 			//check for out-of-bounSNIP_LIST values
 			if (index > -1 && index < this.length){
@@ -140,12 +140,12 @@ var SNIP_LIST;
 		 *      or null if the item doesn't exist.
 		 * @method item
 		 */
-		DLL.prototype.item = function(index) {
+		SnipList.prototype.item = function(index) {
 			var node = this.node(index);
 			return (node == null) ? null : node.data;
 		};
 		
-		DLL.prototype.moveBack = function() {
+		SnipList.prototype.moveBack = function() {
 			if (this.pointer > -1) {
 				this.pointer--;
 				return true;
@@ -154,7 +154,7 @@ var SNIP_LIST;
 			}
 		};
 		
-		DLL.prototype.moveForward = function() {
+		SnipList.prototype.moveForward = function() {
 			if (this.pointer < (this.length -1)) {
 				this.pointer++;
 				return true;
@@ -163,7 +163,7 @@ var SNIP_LIST;
 			}
 		};
 		
-		DLL.prototype.getPointed = function() {
+		SnipList.prototype.getPointed = function() {
 			return this.item(this.pointer);
 		};
 		
@@ -175,7 +175,7 @@ var SNIP_LIST;
 		 * @return {Void}
 		 * @method add
 		 */
-		DLL.prototype.addSnipping = function(data) {
+		SnipList.prototype.addSnipping = function(data) {
 
 			var node = new Node(data);
 			
@@ -211,7 +211,7 @@ var SNIP_LIST;
 		 * @return {int} The number of items in the list.
 		 * @method size
 		 */
-		DLL.prototype.size = function(){
+		SnipList.prototype.size = function(){
 			return this.length;
 		};
 		
@@ -220,7 +220,7 @@ var SNIP_LIST;
 		 * @return {Array} An array containing all of the data in the list.
 		 * @method toArray
 		 */
-		DLL.prototype.toArray = function(){
+		SnipList.prototype.toArray = function(){
 			var result = [],
 				current = this.head;
 			
@@ -237,7 +237,7 @@ var SNIP_LIST;
 		 * @return {Array} An array containing all the noodes
 		 * @method state
 		 */
-		DLL.prototype.state = function(){
+		SnipList.prototype.state = function(){
 			var result = [],
 				current = this.head;
 			
@@ -254,64 +254,64 @@ var SNIP_LIST;
 		 * @return {String} A string representation of the list.
 		 * @method toString
 		 */
-		DLL.prototype.toString = function(){
+		SnipList.prototype.toString = function(){
 			return this.toArray().toString();
 		}; 
 		
-		return new DLL(params);
+		return new SnipList(params);
 	}
 	
-	SNIP_LIST.create = function(params) { return DLL(params) };
+	DROOKY.Utils.SnipList.create = function(params) { return SnipList(params) };
 	
-	SNIP_LIST.test = function() {
+	DROOKY.Utils.SnipList.test = function() {
 		
-		var DLL1 = SNIP_LIST.create();
-		DLL1.addSnipping({ o : "o"});
-		console.log("SIZE SHOULD BE 1",DLL1.size());
-		console.log("POINTED SHOULD BE o",DLL1.getPointed());
-		DLL1.addSnipping({ p : "p"});
-		console.log("SIZE SHOULD BE 2",DLL1.size());
-		console.log("POINTED SHOULD BE p",DLL1.getPointed());
+		var SnipList1 = DROOKY.Utils.SnipList.create();
+		SnipList1.addSnipping({ o : "o"});
+		console.log("SIZE SHOULD BE 1",SnipList1.size());
+		console.log("POINTED SHOULD BE o",SnipList1.getPointed());
+		SnipList1.addSnipping({ p : "p"});
+		console.log("SIZE SHOULD BE 2",SnipList1.size());
+		console.log("POINTED SHOULD BE p",SnipList1.getPointed());
 		
-		console.log(DLL1.toArray());
-		DLL1.remove(1);
-		console.log("SIZE SHOULD BE 1",DLL1.size());
-		DLL1.remove(0);
-		console.log("SIZE SHOULD BE 0",DLL1.size());
-		DLL1.add({ a : "a"});
-		DLL1.add({ b : "b"});
-		var c = { c : "c"};DLL1.add(c);
-		DLL1.add({ d : "d"});
-		console.log("SIZE SHOULD BE 4",DLL1.size());
+		console.log(SnipList1.toArray());
+		SnipList1.remove(1);
+		console.log("SIZE SHOULD BE 1",SnipList1.size());
+		SnipList1.remove(0);
+		console.log("SIZE SHOULD BE 0",SnipList1.size());
+		SnipList1.add({ a : "a"});
+		SnipList1.add({ b : "b"});
+		var c = { c : "c"};SnipList1.add(c);
+		SnipList1.add({ d : "d"});
+		console.log("SIZE SHOULD BE 4",SnipList1.size());
 
-		DLL1.remove(2);
-		console.log("ITEM @ INDEX 2 REMOVED SO THE SIZE SHOULD BE 3",DLL1.size());
-		console.log("AND THE ITEM @ INDEX 2 SHOULD BE {d}",DLL1.item(2));
-		console.log("SINCE POINTER WENT UP WITH EVERY ADDITION AND DOWN WITH EVERY REMOVAL IT SHOULD POINT AT NODE {d}",DLL1.getPointed());
+		SnipList1.remove(2);
+		console.log("ITEM @ INDEX 2 REMOVED SO THE SIZE SHOULD BE 3",SnipList1.size());
+		console.log("AND THE ITEM @ INDEX 2 SHOULD BE {d}",SnipList1.item(2));
+		console.log("SINCE POINTER WENT UP WITH EVERY ADDITION AND DOWN WITH EVERY REMOVAL IT SHOULD POINT AT NODE {d}",SnipList1.getPointed());
 
-		DLL1.moveForward();
-		console.log("MOVING POINTER FORWARD SHOULD RETURN THE SAME ELEMENT {d}",DLL1.getPointed());
+		SnipList1.moveForward();
+		console.log("MOVING POINTER FORWARD SHOULD RETURN THE SAME ELEMENT {d}",SnipList1.getPointed());
 
-		DLL1.moveBack();
-		console.log("MOVING POINTER BACK SHOULD RETURN ELEMENT {b}",DLL1.getPointed());
+		SnipList1.moveBack();
+		console.log("MOVING POINTER BACK SHOULD RETURN ELEMENT {b}",SnipList1.getPointed());
 
-		DLL1.addSnipping({ z : "z"});
-		console.log("SNIPPING AND ADDING ELEMENT NOW SHOULD REMOVE THE {d} AND INSERT {z} IN ITS PLACE",DLL1.item(2));
-		console.log("SIZE SHOULD REMAIN 3",DLL1.size());
+		SnipList1.addSnipping({ z : "z"});
+		console.log("SNIPPING AND ADDING ELEMENT NOW SHOULD REMOVE THE {d} AND INSERT {z} IN ITS PLACE",SnipList1.item(2));
+		console.log("SIZE SHOULD REMAIN 3",SnipList1.size());
 
-		console.log("AND getPointed() SHOULD RETURN {z}",DLL1.getPointed());
+		console.log("AND getPointed() SHOULD RETURN {z}",SnipList1.getPointed());
 		
-		DLL1.moveBack();
-		DLL1.moveBack();
-		DLL1.moveBack();
-		console.log("MOVING BACK THREE TIMES SHOULD BRING THE POINTED TO NULL",DLL1.getPointed());
-		DLL1.addSnipping({ sz : "sz"});
-		console.log("AND SNIP AND ADDING HERE SHOULD BRING THE SIZE TO 1",DLL1.size());
-		console.log("RETURNING {sz} FOR POINTED",DLL1.getPointed());
-		console.log(DLL1.toArray());
+		SnipList1.moveBack();
+		SnipList1.moveBack();
+		SnipList1.moveBack();
+		console.log("MOVING BACK THREE TIMES SHOULD BRING THE POINTED TO NULL",SnipList1.getPointed());
+		SnipList1.addSnipping({ sz : "sz"});
+		console.log("AND SNIP AND ADDING HERE SHOULD BRING THE SIZE TO 1",SnipList1.size());
+		console.log("RETURNING {sz} FOR POINTED",SnipList1.getPointed());
+		console.log(SnipList1.toArray());
 		
 	}
-})(SNIP_LIST || (SNIP_LIST = {}));
+})(DROOKY);
 
 //SNIP_LIST.test();
 
