@@ -54,8 +54,8 @@
 		fn.prototype = Object.create(DROOKY.Editor.Command.prototype);
 		fn.prototype.constructor = fn;
 		var inst = Object.create(fn.prototype);
-		fn.apply(inst,args)
 		inst.init();
+		fn.apply(inst,args)
 		return inst;
 	}	
 	
