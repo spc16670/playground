@@ -15,7 +15,7 @@ function reDo() {
 
 function copy() {
 	DROOKY.Editor.load(DROOKY.Editor.Commands['Copy'],arguments);
-	console.log(DROOKY);
+
 }
 
 function tool() {

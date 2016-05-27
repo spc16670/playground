@@ -24,7 +24,6 @@
 			}
 		}
 		,run : function() {
-			console.log(this)
 			if (this.executing == null) return;
 			if (this.executing.history) {
 				this.history.addSnipping(this.executing);

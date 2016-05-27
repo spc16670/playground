@@ -25,14 +25,11 @@
 		this.handleEvent = function(e) {
 			var rect = this.canvas.getBoundingClientRect();
 			if (e.type == "mousedown") {
-				console.log("onMouseDown",this.canvas)
 				this.points.start.x = e.clientX - rect.left;
 				this.points.start.y = e.clientY - rect.top;
-				console.log(this.points.start);
 			} else if (e.type == "mouseup") {
 				this.points.end.x = e.clientX - rect.left;
 				this.points.end.y = e.clientY - rect.top;
-				console.log(this.points.end);
 				this.onFinish();
 			}
 		}
@@ -43,7 +40,8 @@
 			this.onFinish = onFinish;
 		}
 		
-		this.execute = function(onFinish) { 
+		this.execute = function() { 
+			console.log("Crop");
 			var ctx=this.canvas.getContext("2d");
 			ctx.beginPath();
 			ctx.moveTo(this.points.start.x,this.points.start.y);
@@ -51,8 +49,8 @@
 			ctx.stroke();
 		}
 		this.finish = function() {
-			this.canvas.addEventListener("mousedown",null, false);
-			this.canvas.addEventListener("mouseup",null, false);
+			this.canvas.removeEventListener("mousedown",this, false);
+			this.canvas.removeEventListener("mouseup",this, false);
 		}
 		this.reverse = function() { 
 			console.log(" Crop BEEN REVERSED " + this.name) 
