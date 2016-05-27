@@ -14,38 +14,50 @@
 		this.reverse = function() { console.log(" Tool BEEN REVERSED " + this.name) }
 	}
 	
-	,Crop : function (canvas,onFinish) {
-		this.name = name;
-		this.onFinish = onFinish;
+	,Crop : function (canvas) {
 		this.canvas = canvas;
-		this.execute = function() { 
-			console.log(" Crop BEEN EXECUTED " + this.name) 
+		this.async = true;
+		this.points = { 
+			start : { x : null, y : null }
+			, end : { x : null, y : null } 
+		}
+		
+		this.handleEvent = function(e) {
+			var rect = this.canvas.getBoundingClientRect();
+			if (e.type == "mousedown") {
+				console.log("onMouseDown",this.canvas)
+				this.points.start.x = e.clientX - rect.left;
+				this.points.start.y = e.clientY - rect.top;
+				console.log(this.points.start);
+			} else if (e.type == "mouseup") {
+				this.points.end.x = e.clientX - rect.left;
+				this.points.end.y = e.clientY - rect.top;
+				console.log(this.points.end);
+				this.onFinish();
+			}
+		}
+		
+		this.prepare = function(onFinish) {
+			this.canvas.addEventListener("mousedown",this, false);
+			this.canvas.addEventListener("mouseup",this, false);
+			this.onFinish = onFinish;
+		}
+		
+		this.execute = function(onFinish) { 
 			var ctx=this.canvas.getContext("2d");
 			ctx.beginPath();
 			ctx.moveTo(this.points.start.x,this.points.start.y);
 			ctx.lineTo(this.points.end.x,this.points.end.y);
 			ctx.stroke();
 		}
+		this.finish = function() {
+			this.canvas.addEventListener("mousedown",null, false);
+			this.canvas.addEventListener("mouseup",null, false);
+		}
 		this.reverse = function() { 
 			console.log(" Crop BEEN REVERSED " + this.name) 
 			var ctx=this.canvas.getContext("2d");
 			ctx.clearRect(0,0,150,150);
-		}
-		this.points = { 
-			start : { x : null, y : null }
-			, end : { x : null, y : null } 
-		}
-		this.listener = function(e) {
-			var rect = this.canvas.getBoundingClientRect();
-			console.log
-			if (e.type === "mousedown") {
-				this.points.start.x = e.clientX - rect.left;
-				this.points.start.y = e.clientY - rect.top;
-			} else if (e.type === "mouseup") {
-				this.points.end.x = e.clientX - rect.left;
-				this.points.end.y = e.clientY - rect.top;
-				this.onFinish();
-			}
 		}
 	}
 }
