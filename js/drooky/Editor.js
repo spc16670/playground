@@ -69,7 +69,6 @@
 		} else {
 			DROOKY.Editor.run()
 		}
-		
 	}	
 	
 })(DROOKY);
